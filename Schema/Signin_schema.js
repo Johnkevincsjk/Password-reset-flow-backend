@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-mongoose.connect("mongodb://localhost:27017/Password_reset")
+mongoose.connect('mongodb+srv://johnkevincsjk:pxEHkKPB2iAfAPg4@users.dkhks8z.mongodb.net/backend_passwordreset')
 
 const Signin_schema = new mongoose.Schema({
 

@@ -16,7 +16,7 @@ Login_controller.post('/loginUser', (req, res, next) => {
     const { Mailid, Password } = req.body
     User_login_DB.findOne({ Mailid: Mailid }).then((response) => {
         if (response && response._id) {
-            if (bcrypt.compareSync(response.Password, Password)) {
+            if (bcrypt.compareSync(Password, response.Password)) {
                 const token = jwt.sign({ Role: ['user'] }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 10 })
 
 
