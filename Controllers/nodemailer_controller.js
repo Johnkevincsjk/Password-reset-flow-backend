@@ -12,8 +12,8 @@ async function ResetMail(Mailid, ramdamstring) {
         const mailSender = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.MAIL_EMAIL,
-                pass: process.env.MAIL_PASSWORD
+                user: "johnkevin.csjk@gmail.com",
+                pass: 'tonckprcbyxwosnq'
             }
 
         })

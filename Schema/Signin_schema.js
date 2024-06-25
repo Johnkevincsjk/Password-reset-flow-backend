@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb+srv://johnkevincsjk:pxEHkKPB2iAfAPg4@users.dkhks8z.mongodb.net/backend_passwordreset')
+mongoose.connect('mongodb+srv://johnkevincsjk:6uY3pFdNzFOH86vZ@testusers.ooyvlfq.mongodb.net/backend_passwordreset')
 
 const Signin_schema = new mongoose.Schema({
 
