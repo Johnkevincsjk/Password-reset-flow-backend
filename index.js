@@ -11,7 +11,7 @@ const port = process.env.PORT
 
 
 
-app.use('/', require('./Routers/AuthRoutes'))
+app.use('/api', require('./Routers/AuthRoutes'))
 
 
 app.listen(port, () => {

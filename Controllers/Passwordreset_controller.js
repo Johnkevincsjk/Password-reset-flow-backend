@@ -3,8 +3,10 @@ const user_schema = require('../Schema/Signin_schema');
 const crypto = require('crypto')
 const nodemailer_controller = require('express').Router()
 const dotenv = require('dotenv')
-const sendMailer = require('./nodemailer_controller')
+const ResetMail = require('./nodemailer_controller')
 dotenv.config()
+const bcrypt = require("bcrypt")
+
 
 
 
@@ -28,9 +30,9 @@ Passreset_controller.post('/Password_reset', async (req, res, next) => {
 
             const randomToken = generateToken();
             user.PasswordResetToken = randomToken;
-            const token_timeout = user.ResetTokenExpire = Date.now() + 100000
+            const token_timeout = user.ResetTokenExpire = Date.now() + 3600000 // 1hr
             const ramdamstring = `http://localhost:3000/NewPassword/${randomToken}`
-            const mails = sendMailer(Mailid, ramdamstring)
+            const mails = await ResetMail(Mailid, ramdamstring)
             await user.save()
 
 
@@ -59,21 +61,23 @@ Passreset_controller.post('/Password_reset', async (req, res, next) => {
 
 // New password Creation
 
-Passreset_controller.post('/createPassword', async (req, res) => {
+Passreset_controller.post('/NewPassword/:ramdamstring', async (req, res, next) => {
     try {
-        const { token } = req.query;
-        const { Password } = req.body;
 
-        const user = await user_schema.findOne({
-            PasswordResetToken: token,
-            ResetTokenExpire: { $gt: Date.now() } // Ensure token is not expired
-        });
+
+        const { Password } = req.body
+
+        const user = await user_schema.findOne({ PasswordResetToken: req.params.ramdamstring });
+        console.log(user)
 
         if (user) {
-            user.Password = Password;
-            user.PasswordResetToken = ""; // Clear the reset token
-            user.ResetTokenExpire = ""; // Clear the token expiry time
+            const hashedpassword = await bcrypt.hash(Password, 12)
+            user.Password = hashedpassword;
+
+            user.PasswordResetToken = ""
+            user.ResetTokenExpire = ""
             await user.save();
+
 
             return res.status(200).json({
                 status: 'success',
@@ -88,7 +92,7 @@ Passreset_controller.post('/createPassword', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            status: 'error',
+            status: 'Reset error',
             message: 'Something went wrong'
         });
     }
