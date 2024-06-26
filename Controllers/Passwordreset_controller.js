@@ -31,7 +31,7 @@ Passreset_controller.post('/Password_reset', async (req, res, next) => {
             const randomToken = generateToken();
             user.PasswordResetToken = randomToken;
             const token_timeout = user.ResetTokenExpire = Date.now() + 3600000 // 1hr
-            const ramdamstring = `http://localhost:3000/NewPassword/${randomToken}`
+            const ramdamstring = `https://fascinating-fenglisu-4af399.netlify.app/${randomToken}`
             const mails = await ResetMail(Mailid, ramdamstring)
             await user.save()
 
